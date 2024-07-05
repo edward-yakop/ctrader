@@ -3,12 +3,12 @@ package ctrader
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/satori/uuid"
-	"golang.org/x/exp/slog"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/diegobernardes/ctrader/openapi"
@@ -76,7 +76,7 @@ func (c *Client) handlerMessage(payload []byte) {
 	if msg.GetClientMsgId() == "" {
 		message, err := mappingResponse(msg.GetPayloadType())
 		if err != nil {
-			c.Logger.Error("unknow message type", "error", err)
+			c.Logger.Error("unknown message type", "error", err)
 			return
 		}
 		if err = proto.Unmarshal(msg.GetPayload(), message); err != nil {

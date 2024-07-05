@@ -4,6 +4,7 @@ package ctrader
 
 import (
 	"context"
+	"log/slog"
 	"os"
 	"strconv"
 	"testing"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/exp/slog"
 
 	"github.com/diegobernardes/ctrader/openapi"
 )
