@@ -29,7 +29,7 @@ func TestClientIntegration(t *testing.T) {
 	require.NoError(t, err)
 	ctraderToken := os.Getenv("CTRADER_TOKEN")
 
-	require.NoError(t, c.Start())
+	require.NoError(t, c.Start(context.Background()))
 
 	req := &openapi.ProtoOAAccountAuthReq{
 		AccessToken:         &ctraderToken,

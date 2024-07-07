@@ -36,7 +36,7 @@ type Client struct {
 	requestRegistryMutex sync.Mutex
 }
 
-func (c *Client) Start() error {
+func (c *Client) Start(ctx context.Context) error {
 	c.transport = &transportTCP{deadline: c.Deadline}
 	var address string
 	if c.Live {
@@ -49,8 +49,6 @@ func (c *Client) Start() error {
 		return fmt.Errorf("failed to open the transport: %w", err)
 	}
 	c.requestRegistry = make(map[string]chan *openapi.ProtoMessage)
-	ctx, ctxCancel := context.WithTimeout(context.Background(), time.Second)
-	defer ctxCancel()
 	if err := c.applicationAuthorization(ctx); err != nil {
 		return fmt.Errorf("failed to authenticate the application: %w", err)
 	}
@@ -104,7 +102,7 @@ func (c *Client) handlerError(err error) {
 			time.Sleep(time.Second)
 			continue
 		}
-		if err = c.Start(); err != nil {
+		if err = c.Start(context.Background()); err != nil {
 			c.Logger.Error("failed to start the client", "error", err.Error())
 			time.Sleep(time.Second)
 			continue
